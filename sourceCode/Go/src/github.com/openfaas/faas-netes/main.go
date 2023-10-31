@@ -1,16 +1,14 @@
- Copyright (c) Alex Ellis 2017. All rights reserved.
- Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 package main
 
 import (
 	"flag"
-	cpuRepository "github.com/openfaas/faas-netes/cpu/repository"
-	"github.com/openfaas/faas-netes/gpu/aside"
-	 "github.com/openfaas/faas-netes/gpu/repository"
 	"log"
 	"os"
 	"time"
+
+	cpuRepository "github.com/openfaas/faas-netes/cpu/repository"
+	"github.com/openfaas/faas-netes/gpu/aside"
+	"github.com/openfaas/faas-netes/gpu/repository"
 
 	"github.com/openfaas/faas-provider/proxy"
 	"k8s.io/client-go/kubernetes"

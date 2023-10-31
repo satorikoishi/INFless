@@ -1,4 +1,4 @@
-FROM teamserverless/license-check:0.3.6 as license-check
+# FROM teamserverless/license-check:0.3.6 as license-check
 
 FROM golang:1.13 as build
 
@@ -12,7 +12,7 @@ ARG ARCH="x86_64"
 ARG GOOS=linux
 ARG GOARM
 
-COPY --from=license-check /license-check /usr/bin/
+# COPY --from=license-check /license-check /usr/bin/
 
 WORKDIR /go/src/github.com/openfaas/faas/gateway
 

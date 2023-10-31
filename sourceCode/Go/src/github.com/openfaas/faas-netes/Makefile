@@ -1,5 +1,6 @@
 .PHONY: build local build-arm64 build-armhf push namespaces install install-armhf charts ci-armhf-build ci-armhf-push ci-arm64-build ci-arm64-push
 TAG?=latest
+GIT_COMMIT?=$(shell git rev-list -1 HEAD)
 
 all: build
 
@@ -13,7 +14,7 @@ build-armhf:
 	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
 
 build:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
+	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" --build-arg GIT_COMMIT="$(GIT_COMMIT)" -t openfaas/faas-netes:$(TAG) .
 
 push:
 	docker push openfaas/faas-netes:$(TAG)
