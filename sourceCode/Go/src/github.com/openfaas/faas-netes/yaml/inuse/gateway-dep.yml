@@ -131,5 +131,5 @@ spec:
         ports:
         - containerPort: 8181
           protocol: TCP
-      nodeSelector:
-        kubernetes.io/hostname: kube-master
+      # nodeSelector:
+      #   kubernetes.io/hostname: kube-master

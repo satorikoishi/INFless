@@ -63,5 +63,5 @@ spec:
                 mode: 0644
         - name: prom-data
           emptyDir: {}
-      nodeSelector:
-        kubernetes.io/hostname: kube-master
+      # nodeSelector:
+      #   kubernetes.io/hostname: kube-master
