@@ -1,5 +1,6 @@
 cd ~
 
+sudo swapoff -a
 sudo apt-get update
 
 # docker
@@ -36,11 +37,10 @@ EOF
 # Apply sysctl params without reboot
 sudo sysctl --system
 
-sudo swapoff -a
-echo '[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-    SystemdCgroup = true' > config.toml
-sudo mv config.toml /etc/containerd/config.toml
+sudo mkdir -m 0755 -p /etc/containerd
+sudo sh -c "containerd config default > /etc/containerd/config.toml"
+sudo sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.toml
+
 echo '{
  "cniVersion": "1.0.0",
  "name": "containerd-net",
@@ -95,8 +95,10 @@ sudo systemctl restart docker
 
 # k8s
 sudo apt-get install -y apt-transport-https ca-certificates curl python3-pip
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+# curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+# echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 # curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
 # echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list > /dev/null
 # sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.asc https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -104,7 +106,7 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 pip install kubernetes
 
 sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubelet=1.26.5-00 kubeadm=1.26.5-00 kubectl=1.26.5-00
 sudo apt-mark hold kubelet kubeadm kubectl
 
 echo "source <(kubectl completion bash)" >> ~/.bashrc
