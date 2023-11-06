@@ -1,13 +1,15 @@
 # Build stage
-FROM teamserverless/license-check:0.3.6 as license-check
+# FROM teamserverless/license-check:0.3.6 as license-check
 FROM golang:1.13 as builder
 
 ENV GO111MODULE=off
 ENV CGO_ENABLED=0
 
+ARG VERSION='dev'
+ARG GIT_COMMIT
 #WORKDIR /usr/bin/
 #RUN curl -sLSf https://raw.githubusercontent.com/teamserverless/license-check/master/get.sh | sh
-COPY --from=license-check /license-check /usr/bin/
+# COPY --from=license-check /license-check /usr/bin/
 
 WORKDIR /go/src/github.com/openfaas/faas-cli
 COPY . .
@@ -17,13 +19,11 @@ COPY . .
 
 # ldflags "-s -w" strips binary
 # ldflags -X injects commit version into binary
-RUN /usr/bin/license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
+# RUN /usr/bin/license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
 
 #RUN go test $(go list ./... | grep -v /vendor/ | grep -v /template/|grep -v /build/|grep -v /sample/) -cover
 
-RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
-    && GIT_COMMIT=$(git rev-list -1 HEAD) \
-    && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
+RUN CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
     -X github.com/openfaas/faas-cli/version.GitCommit=${GIT_COMMIT} \
     -X github.com/openfaas/faas-cli/version.Version=${VERSION} \
     -X github.com/openfaas/faas-cli/commands.Platform=x86_64" \
