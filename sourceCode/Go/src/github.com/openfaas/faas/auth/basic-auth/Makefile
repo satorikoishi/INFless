@@ -1,4 +1,4 @@
-TAG?=latest
+TAG?=0.17.0
 
 .PHONY: build
 build:
