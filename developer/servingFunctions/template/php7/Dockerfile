@@ -1,4 +1,4 @@
-FROM openfaas/classic-watchdog:0.18.1 as watchdog
+FROM ghcr.io/openfaas/classic-watchdog:0.2.2 as watchdog
 
 # start with the official Composer image and name it
 FROM composer:1.7 AS composer
