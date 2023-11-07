@@ -13,7 +13,7 @@ sudo docker image save -o basicauth.tar openfaas/basic-auth-plugin:0.17.0
 sudo docker image save -o faasnetes.tar openfaas/faas-netes:latest-dev
 sudo ctr -n=k8s.io image import gateway.tar
 sudo ctr -n=k8s.io image import basicauth.tar
-sudo ctr -n=k8s.io image import faas-netes.tar
+sudo ctr -n=k8s.io image import faasnetes.tar
 
 cd ~/INFless/sourceCode/Go/src/github.com/openfaas/faas-netes
 sudo ./yaml/apply.sh
