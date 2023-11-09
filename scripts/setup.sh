@@ -26,3 +26,11 @@ sudo ./yaml/apply.sh
 cd ~/INFless/sourceCode/Go/src/github.com/openfaas/faas-cli
 sudo make
 sudo mv faas-cli /usr/local/bin/faasdev-cli
+
+sudo apt-get install -y maven
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install openjdk-8-jre
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+
+# TODO: yml gateway config, loadGen IP config
